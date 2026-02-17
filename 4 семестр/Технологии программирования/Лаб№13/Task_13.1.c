@@ -20,6 +20,9 @@ MSE - средняя квадратичная ошибка (Mean Squared Error)
 RMSE - корень из MSE (Root Mean Squared Error) = MSE*MSE
 MAE (Mean Absolute Error) = средняя абсолютная ошибка
 MARE (Mean Absolute Relative Error) = средняя относительная ошибка в %
+
+
+⁡⁢⁣⁢// Раздел 4.2⁡
 */
 
 #include <stdio.h>
@@ -67,11 +70,22 @@ void solve_2x2(double A[2][2], double b[2], double x[2])
 
 int main() 
 {
-    // Исходные данные
-    double s[N] = {1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3};
-    double Q[N] = {5.21, 4.196, 3.759, 3.672, 4.592, 4.621, 5.758, 7.173, 9.269};
+    double s[N] = {};
+    double Q[N] = {};
     
-    // ⁣ЛИНЕЙНАЯ РЕГРЕССИЯ⁡⁡ Q = a + b*s
+    FILE *file = fopen("data_13.1.txt", "r");
+    if (file == NULL) {
+        printf("Error open's file!");
+        return 1;
+    }
+
+    int cnt = 0;
+    while (fscanf(file, "%lf %lf", &s[cnt], &Q[cnt]) == 2)
+        cnt++;
+
+    fclose(file);
+    
+    // ЛИНЕЙНАЯ РЕГРЕССИЯ Q = a + b*s
     double sum_s = 0, sum_Q = 0, sum_s_2 = 0, sum_sQ = 0, sum_Q_2 = 0;
     
     for (int i = 0; i < N; i++) 
@@ -117,8 +131,8 @@ int main()
     
     for (int i = 0; i < N; i++) 
     {
-        double Q_pred = a_coef + b_coef * s[i];
-        double error = Q[i] - Q_pred;
+        double Q_predicted = a_coef + b_coef * s[i];
+        double error = Q[i] - Q_predicted;
         double rel_error = fabs(error / Q[i]) * 100;
         
         SSE_lin += error * error;
@@ -126,21 +140,19 @@ int main()
         sum_rel_err_lin += rel_error;
         
         printf("  %d   | %.2f  | %.3f  | %.3f  | %7.3f | %6.2f%%\n",
-               i+1, s[i], Q[i], Q_pred, error, rel_error);
+               i+1, s[i], Q[i], Q_predicted, error, rel_error);
     }
     
     double MSE_lin = SSE_lin / N;
-    double RMSE_lin = sqrt(MSE_lin);
     double MAE_lin = sum_abs_err_lin / N;
     double MARE_lin = sum_rel_err_lin / N;
     
     printf("\nСуммарная квадратичная ошибка: %.6f\n", SSE_lin);
-    printf("Средняя квадратичная ошибка:    %.6f\n", MSE_lin);
-    printf("Средняя абсолютная ошибка:      %.6f\n", MAE_lin);
-    printf("Средняя относительная ошибка:         %.2f%%\n\n", MARE_lin);
+    printf("Средняя квадратичная ошибка:     %.6f\n", MSE_lin);
+    printf("Средняя абсолютная ошибка:       %.6f\n", MAE_lin);
+    printf("Средняя относительная ошибка:    %.2f%%\n\n", MARE_lin);
     
-    // ============= ЧАСТЬ 2: КВАДРАТИЧНАЯ ЗАВИСИМОСТЬ Q = A*s² + B*s + C =============
-    
+    // КВАДРАТИЧНАЯ ЗАВИСИМОСТЬ Q = A*s² + B*s + C
     double sum_s3 = 0, sum_s4 = 0, sum_s2Q = 0;
     
     for (int i = 0; i < N; i++) 
@@ -164,14 +176,15 @@ int main()
     double coef_quad[3];  // [A, B, C]
     
     solve_3x3(A_quad, b_quad, coef_quad);
-    double A_par = coef_quad[0];
+    double A_parabola = coef_quad[0];
     double B_par = coef_quad[1];
     double C_par = coef_quad[2];
     
-    printf("Квадратичная зависимость: Q(s) = %.4f * s² + %.4f * s + %.4f\n\n", A_par, B_par, C_par);
+    printf("Квадратичная зависимость: Q(s) = %.4f * s² + %.4f * s + %.4f\n\n", A_parabola, B_par, C_par);
     
-    // Индекс корреляции (coefficient of determination R²)
-    double SST = 0;  // Total sum of squares
+    // Индекс корреляции
+    // Общая изменчивость данных относительно среднего значения
+    double SST = 0;
     for (int i = 0; i < N; i++)
         SST += (Q[i] - mean_Q) * (Q[i] - mean_Q);
     
@@ -182,8 +195,8 @@ int main()
     
     for (int i = 0; i < N; i++) 
     {
-        double Q_pred = A_par * s[i] * s[i] + B_par * s[i] + C_par;
-        double error = Q[i] - Q_pred;
+        double Q_predicted = A_parabola * s[i] * s[i] + B_par * s[i] + C_par;
+        double error = Q[i] - Q_predicted;
         double rel_error = fabs(error / Q[i]) * 100;
         
         SSE_quad += error * error;
@@ -191,25 +204,23 @@ int main()
         sum_rel_err_quad += rel_error;
         
         printf("  %d   | %.2f  | %.3f  | %.3f  | %7.3f | %6.2f%%\n",
-               i+1, s[i], Q[i], Q_pred, error, rel_error);
+               i+1, s[i], Q[i], Q_predicted, error, rel_error);
     }
     
     double R_squared = 1 - (SSE_quad / SST);
     double R_index = sqrt(R_squared);
     
     printf("\nИндекс корреляции R = %.4f\n", R_index);
-    printf("R² (коэффициент детерминации) = %.4f\n\n", R_squared);
     
     double MSE_quad = SSE_quad / N;
     double RMSE_quad = sqrt(MSE_quad);
     double MAE_quad = sum_abs_err_quad / N;
     double MARE_quad = sum_rel_err_quad / N;
     
-    printf("Суммарная квадратичная ошибка (SSE): %.6f\n", SSE_quad);
-    printf("Средняя квадратичная ошибка (MSE):    %.6f\n", MSE_quad);
-    printf("Корень из MSE (RMSE):                 %.6f\n", RMSE_quad);
-    printf("Средняя абсолютная ошибка (MAE):      %.6f\n", MAE_quad);
-    printf("Средняя относительная ошибка:         %.2f%%\n\n", MARE_quad);
+    printf("Суммарная квадратичная ошибка:  %.6f\n", SSE_quad);
+    printf("Средняя квадратичная ошибка:    %.6f\n", MSE_quad);
+    printf("Средняя абсолютная ошибка:      %.6f\n", MAE_quad);
+    printf("Средняя относительная ошибка:   %.2f%%\n\n", MARE_quad);
     
     return 0;
 }
