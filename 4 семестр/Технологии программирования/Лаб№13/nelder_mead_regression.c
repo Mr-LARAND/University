@@ -38,7 +38,6 @@ typedef struct {
     double value;        // значение целевой функции 
 } Vertex;
 
-
 // f(A, B, C) = SSE(A, B, C) = Σ(Qᵢ - (A·sᵢ² + B·sᵢ + C))²
 double objective_function(double *params, Data *data) 
 {
@@ -251,7 +250,6 @@ void compute_statistics(double *params, Data *data)
         mean_Q += data->Q[i];
     mean_Q /= data->n;
 
-    // Вычисление метрик
     double SSE = 0.0, MAE = 0.0, MARE = 0.0, SST = 0.0;
 
     printf("Точка | s     | Q_изм  | Q_пред | Ошибка  | Отн.ошибка\n");
