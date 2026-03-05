@@ -1,55 +1,55 @@
+/*
+Задача о восьми ферзях.
+На шахматную доску необходимо поставить 8 ферзей, чтобы они не били
+друг друга. Шахматная доска имеет размер 8 x 8. Ферзь ходит по диаго-
+нали, вертикали и горизонтали.
+Необходимо написать программу для решения задачи в следующих
+вариациях:
+2. Найти все расстановки ферзей.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 8
+#define DIMENSION 8
 
-int array_x[N];
+int board[DIMENSION];
 int count = 0;
 
-int place_is_free(int k)
+int place_is_free(int j)
 {
-    for (int i = 0; i < k; i++)
-    {
-        if (array_x[i] == array_x[k] || abs(array_x[i] - array_x[k]) == abs(i - k))
+    for (int i = 0; i < j; i++) 
+        if (board[i] == board[j] || abs(board[i] - board[j]) == abs(i - j))
             return 0;
-    }
     return 1;
 }
 
-void print_board()
+void print_result()
 {
     printf("Решение %d:\n", ++count);
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            if (array_x[i] == j)
-                printf("Q ");
-            else
-                printf(". ");
-        }
-        printf("\n");
-    }
+    for (int i = 0; i < DIMENSION; i++)
+        for (int j = 0; j < DIMENSION; j++) 
+            if (board[i] == j)
+                printf("%d", board[i]);
     printf("\n");
 }
 
-void queen(int k)
+void solve(int j)
 {
-    for (array_x[k] = 0; array_x[k] < N; array_x[k]++)
+    for (board[j] = 0; board[j] < DIMENSION; board[j]++)
     {
-        if (place_is_free(k))
+        if (place_is_free(j))
         {
-            if (k == N - 1)
-                print_board();
+            if (j == DIMENSION - 1)
+                print_result();
             else
-                queen(k + 1);
+                solve(j + 1);
         }
     }
 }
 
 int main()
 {
-    queen(0);
-    printf("Всего решений: %d\n", count);
+    solve(0);
     return 0;
 }

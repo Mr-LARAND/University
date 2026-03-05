@@ -11,61 +11,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 8
+#define DIMENSION 8
 
-int array_x[N]; // столбец ферзя в строке i
+int board[DIMENSION]; // столбец ферзя в строке i
                 // индекс массива = номер строки
                 // значение = номер столбца
 int found = 0;
 
-int place_is_free(int k) // к-я строка
+int place_is_free(int j) // j-я строка
 {
-    for (int i = 0; i < k; i++)
-        if (array_x[i] == array_x[k] || abs(array_x[i] - array_x[k]) == abs(i - k))
+    for (int i = 0; i < j; i++)
+        if (board[i] == board[j] || abs(board[i] - board[j]) == abs(i - j))
             return 0;
     return 1;
 }
 
-void queen(int k)
+void solve(int j)
 {
-    for (array_x[k] = 0; array_x[k] < N; array_x[k]++)
+    for (board[j] = 0; board[j] < DIMENSION; board[j]++)
     {
-        if (place_is_free(k))
+        if (place_is_free(j))
         {
-            if (k == N - 1) {
+            if (j == DIMENSION - 1) {
                 found = 1;
                 return;
             }
             else
-                queen(k + 1);
+                solve(j + 1);
         }
         if (found) 
             return;
     }
 }
 
-void print_board()
+void print_result()
 {
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            if (array_x[i] == j)
-                printf("Q ");
-            else
-                printf(". ");
-        }
-        printf("\n");
-    }
+    for (int i = 0; i < DIMENSION; i++)
+        for (int j = 0; j < DIMENSION; j++)
+            if (board[i] == j)
+                printf("%d", board[i]);
+    printf("\n");
 }
 
 int main()
 {
-    queen(0);
+    solve(0);
     if (found)
-        print_board();
-    else
-        printf("Решение не найдено\n");
+        print_result();
 
     return 0;
 }

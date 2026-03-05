@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define N 9  // количество точек данных
+#define DIMENSION 9  // количество точек данных
 #define DIM 3  // размерность (A, B, C)
 #define MAX_ITER 10000  // максимум итераций
 #define EPSILON 1e-8  // точность
@@ -27,8 +27,8 @@
 
 // Структура для хранения данных
 typedef struct {
-    double s[N];  // независимая переменная
-    double Q[N];  // зависимая переменная
+    double s[DIMENSION];  // независимая переменная
+    double Q[DIMENSION];  // зависимая переменная
     int n;        // количество точек
 } Data;
 
@@ -291,7 +291,7 @@ void compute_statistics(double *params, Data *data)
 int main() 
 {
     Data data;
-    data.n = N;
+    data.n = DIMENSION;
 
     FILE *file = fopen("data_13.1.txt", "r");
     if (file == NULL) {
@@ -299,7 +299,7 @@ int main()
         return 1;
     }
 
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < DIMENSION; i++)
         if (fscanf(file, "%lf %lf", &data.s[i], &data.Q[i]) != 2) {
             printf("Ошибка чтения данных\n");
             fclose(file);

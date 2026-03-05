@@ -29,7 +29,7 @@ MARE (Mean Absolute Relative Error) = средняя относительная
 #include <math.h>
 #include <stdlib.h>
 
-#define N 9  // количество точек
+#define DIMENSION 9  // количество точек
 
 // Ф-я для решения системы 3x3 методом Гаусса
 void solve_3x3(double A[3][3], double b[3], double x[3]) 
@@ -70,8 +70,8 @@ void solve_2x2(double A[2][2], double b[2], double x[2])
 
 int main() 
 {
-    double s[N] = {};
-    double Q[N] = {};
+    double s[DIMENSION] = {};
+    double Q[DIMENSION] = {};
     
     FILE *file = fopen("data_13.1.txt", "r");
     if (file == NULL) {
@@ -88,7 +88,7 @@ int main()
     // ЛИНЕЙНАЯ РЕГРЕССИЯ Q = a + b*s
     double sum_s = 0, sum_Q = 0, sum_s_2 = 0, sum_sQ = 0, sum_Q_2 = 0;
     
-    for (int i = 0; i < N; i++) 
+    for (int i = 0; i < DIMENSION; i++) 
     {
         sum_s += s[i];
         sum_Q += Q[i];
@@ -97,14 +97,14 @@ int main()
         sum_Q_2 += Q[i] * Q[i]; // Нужно для коэффициента кореляции
     }
     
-    double mean_s = sum_s / N;
-    double mean_Q = sum_Q / N;
+    double mean_s = sum_s / DIMENSION;
+    double mean_Q = sum_Q / DIMENSION;
     
     // Решаем систему для линейной регрессии в матр. виде Ax = b
     // Матрица A
     double A_lin[2][2] = {
         {sum_s_2, sum_s},
-        {sum_s, N}
+        {sum_s, DIMENSION}
     };
 
     double b_lin[2] = {sum_sQ, sum_Q}; // вектор справа 
@@ -117,8 +117,8 @@ int main()
     printf("\nЛинейная регрессия: Q(s) = %.4f + %.4fs\n", a_coef, b_coef);
     
     // Коэффициент корреляции
-    double numerator = N * sum_sQ - sum_s * sum_Q;
-    double denominator = sqrt((N * sum_s_2 - sum_s * sum_s) * (N * sum_Q_2 - sum_Q * sum_Q));
+    double numerator = DIMENSION * sum_sQ - sum_s * sum_Q;
+    double denominator = sqrt((DIMENSION * sum_s_2 - sum_s * sum_s) * (DIMENSION * sum_Q_2 - sum_Q * sum_Q));
     double r = numerator / denominator;
     
     printf("Коэффициент корреляции r = %.4f\n\n", r);
@@ -129,7 +129,7 @@ int main()
     printf("Точка | s     | Q_изм  | Q_лин  | Ошибка  | Отн.ошибка\n");
     printf("------|-------|--------|--------|---------|------------\n");
     
-    for (int i = 0; i < N; i++) 
+    for (int i = 0; i < DIMENSION; i++) 
     {
         double Q_predicted = a_coef + b_coef * s[i];
         double error = Q[i] - Q_predicted;
@@ -143,9 +143,9 @@ int main()
                i+1, s[i], Q[i], Q_predicted, error, rel_error);
     }
     
-    double MSE_lin = SSE_lin / N;
-    double MAE_lin = sum_abs_err_lin / N;
-    double MARE_lin = sum_rel_err_lin / N;
+    double MSE_lin = SSE_lin / DIMENSION;
+    double MAE_lin = sum_abs_err_lin / DIMENSION;
+    double MARE_lin = sum_rel_err_lin / DIMENSION;
     
     printf("\nСуммарная квадратичная ошибка: %.6f\n", SSE_lin);
     printf("Средняя квадратичная ошибка:     %.6f\n", MSE_lin);
@@ -155,7 +155,7 @@ int main()
     // КВАДРАТИЧНАЯ ЗАВИСИМОСТЬ Q = A*s² + B*s + C
     double sum_s3 = 0, sum_s4 = 0, sum_s2Q = 0;
     
-    for (int i = 0; i < N; i++) 
+    for (int i = 0; i < DIMENSION; i++) 
     {
         double s2 = s[i] * s[i];
         double s3 = s2 * s[i];
@@ -170,7 +170,7 @@ int main()
     double A_quad[3][3] = {
         {sum_s4, sum_s3, sum_s_2},
         {sum_s3, sum_s_2, sum_s},
-        {sum_s_2, sum_s, N}
+        {sum_s_2, sum_s, DIMENSION}
     };
     double b_quad[3] = {sum_s2Q, sum_sQ, sum_Q};
     double coef_quad[3];  // [A, B, C]
@@ -185,7 +185,7 @@ int main()
     // Индекс корреляции
     // Общая изменчивость данных относительно среднего значения
     double SST = 0;
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < DIMENSION; i++)
         SST += (Q[i] - mean_Q) * (Q[i] - mean_Q);
     
     double SSE_quad = 0, sum_abs_err_quad = 0, sum_rel_err_quad = 0;
@@ -193,7 +193,7 @@ int main()
     printf("Точка | s     | Q_изм  | Q_квад | Ошибка  | Отн.ошибка\n");
     printf("------|-------|--------|--------|---------|------------\n");
     
-    for (int i = 0; i < N; i++) 
+    for (int i = 0; i < DIMENSION; i++) 
     {
         double Q_predicted = A_parabola * s[i] * s[i] + B_par * s[i] + C_par;
         double error = Q[i] - Q_predicted;
@@ -212,10 +212,10 @@ int main()
     
     printf("\nИндекс корреляции R = %.4f\n", R_index);
     
-    double MSE_quad = SSE_quad / N;
+    double MSE_quad = SSE_quad / DIMENSION;
     double RMSE_quad = sqrt(MSE_quad);
-    double MAE_quad = sum_abs_err_quad / N;
-    double MARE_quad = sum_rel_err_quad / N;
+    double MAE_quad = sum_abs_err_quad / DIMENSION;
+    double MARE_quad = sum_rel_err_quad / DIMENSION;
     
     printf("Суммарная квадратичная ошибка:  %.6f\n", SSE_quad);
     printf("Средняя квадратичная ошибка:    %.6f\n", MSE_quad);
