@@ -104,7 +104,7 @@ void solve(int j, int *board, int size)
 int main() 
 {
     int size;
-    printf("Please Enter the dimension board:\n");
+    printf("Please Enter the dimension board: ");
     if (scanf("%d", &size) != 1) {
         printf("Error input...\n");  
         return 1;
