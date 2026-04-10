@@ -10,3 +10,8 @@ calculate_f(X, F) :-
 calculate_f(X, F) :-
     X < 1, !,
     F is X + 58.
+
+% Случай 3: X >= 1
+calculate_f(X, F) :-
+    X >= 1, !,
+    F is X / 25.

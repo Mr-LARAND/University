@@ -1,2 +1,1 @@
-
-calculate_y(X, P, Z, Y) :- Y is max(max(X*X, Z*Z), P*P) + Z / P.
+calculate_y(X, P, Z, Y) :- P =\= 0, Y is max(max(X*X, Z*Z), P*P) + Z / P.
