@@ -5,7 +5,7 @@
 
 int main() 
 {
-    printf("\nБиблиотека GMP (целые числа)\n");
+    printf("\nБиблиотека GMP\n");
     mpz_t z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res;
     mpz_inits(z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res, NULL);
     
@@ -25,7 +25,7 @@ int main()
     mpz_clears(z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res, NULL);
 
 
-    printf("\nБиблиотека MPFR (числа с плавающей запятой)\n");
+    printf("\nБиблиотека MPFR\n");
     mpfr_prec_t prec = 256; // точность в битах
     mpfr_t x, y, x2, x4, y2, two_y, two_y_sq, y2_plus_1, part2, q;
     mpfr_inits2(prec, x, y, x2, x4, y2, two_y, two_y_sq, y2_plus_1, part2, q, (mpfr_ptr) 0);
