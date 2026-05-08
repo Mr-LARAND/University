@@ -6,7 +6,7 @@
 int main() 
 {
     printf("\nБиблиотека GMP\n");
-    mpz_t z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res;
+    int z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res;
     mpz_inits(z_x, z_y, z_x2, z_x4, z_2y, z_2y2, z_y2, z_y2_plus_1, z_part2, z_res, NULL);
     
     mpz_set_ui(z_x, 665857);

@@ -1,3 +1,14 @@
+    # organization (Организация)
+    # theater (Театр) - подкласс organization
+    # drama_theater (Драматический театр) - подкласс theater
+    # person (Человек)
+    # employee (Сотрудник) - подкласс person
+    # actor (Актер) - подкласс employee
+
+# mhat (МХАТ) — экземпляр drama_theater
+# ivanov (Иванов) — экземпляр actor
+# petrov (Петров) — экземпляр actor
+
 % ИЕРАРХИЯ КЛАССОВ (ТАКСОНОМИЯ)
 is_a(theater, organization).
 is_a(drama_theater, theater).
@@ -12,17 +23,17 @@ instance_of(petrov, actor).
 
 % СВОЙСТВА КЛАССОВ
 class_property(organization, has_building, yes).
-class_property(organization, goal, profit).
+class_property(organization, goal, profit). # Главная цель любой организации — получение прибыли
 
-class_property(theater, has_stage, yes).
+class_property(theater, has_stage, yes). # Все театры имеют сцену 
 class_property(theater, sells_tickets, yes).
 % Исключение на уровне подкласса: театр преследует цель искусства, а не прибыли
-class_property(theater, goal, art). 
+class_property(theater, goal, art). # не прибыль, а искусство 
 
-class_property(drama_theater, genre, drama).
+class_property(drama_theater, genre, drama). 
 
-class_property(person, breathes, yes).
-class_property(employee, receives_salary, yes).
+class_property(person, breathes, yes). # Любой человек дышит
+class_property(employee, receives_salary, yes). # Любой сотрудник получает зарплату 
 class_property(employee, has_vacation, yes).
 
 class_property(actor, performs_on_stage, yes).
